@@ -51,7 +51,7 @@ def login():
                 # "expiration": str(datetime.utcnow() + timedelta(seconds=120))
                 os.environ["SECRET_KEY"], algorithm="HS256")
                 return jsonify({"token": token})
-        return jsonify({})
+        return jsonify({ "message": "Login Failed. Incorrect email/password" })
 
 @auth.route("/signup", methods=["POST"])
 def signup():
@@ -59,20 +59,18 @@ def signup():
         full_name = request.json["full_name"]
         email = request.json["email"]
         phone_number = request.json["phone_number"]
-        password1 = request.json["password1"]
-        password2 = request.json["password2"]
-
+        password = request.json["password"]
 
         user = User.query.filter_by(email=email).first()
 
         if user:
             print(user)
-            return jsonify({"msg": "User already exists with this email"})
+            return jsonify({"message": "User already exists with this email"})
         else:
-            hashed_password = generate_password_hash(password1, method="sha256")
+            hashed_password = generate_password_hash(password, method="sha256")
             new_user = User(email=email, password=hashed_password, full_name=full_name, phone_number=phone_number)
             db.session.add(new_user)
             db.session.commit()
-            return jsonify({"msg": "success"})
+            return jsonify({"msg": "User created successfully"})
     return jsonify({})
 
