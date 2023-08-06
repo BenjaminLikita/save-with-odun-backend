@@ -1,40 +1,40 @@
-name: Deploy
+# name: Deploy
 
-on:
-  push:
-    branches:
-    - main
+# on:
+#   push:
+#     branches:
+#     - main
 
-jobs:
-  deploy_lambda:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.9", "3.10"]
-    env:
-      SECRET_KEY: dodlee0x03krddssl3.3dmo09dskssddsksr
-      AWS_ACCESS_KEY_ID: AKIAXYQWWXOLIDBL7JDV
-      AWS_SECRET_ACCESS_KEY: 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
+# jobs:
+#   deploy_lambda:
+#     runs-on: ubuntu-latest
+#     strategy:
+#       matrix:
+#         python-version: ["3.10"]
+#     env:
+#       SECRET_KEY: dodlee0x03krddssl3.3dmo09dskssddsksr
+#       AWS_ACCESS_KEY_ID: AKIAXYQWWXOLIDBL7JDV
+#       AWS_SECRET_ACCESS_KEY: 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
 
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-      - name: Display Environment Variables
-        run: echo ${{ env.SECRET_KEY }}
-      - name: Deploy
-        run: |
-          zip -j deploy.zip ./*
-          aws lambda update-function-code --function-name=SWO-Backend --zip-file=fileb://deploy.zip
+#     steps:
+#       - uses: actions/checkout@v3
+#       - name: Set up Python ${{ matrix.python-version }}
+#         uses: actions/setup-python@v4
+#         with:
+#           python-version: ${{ matrix.python-version }}
+#       - name: Configure AWS Credentials
+#         uses: aws-actions/configure-aws-credentials@v1
+#         with:
+#           aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+#           aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+#           aws-region: us-east-1
+#       - name: Install dependencies
+#         run: |
+#           python -m pip install --upgrade pip
+#           pip install -r requirements.txt
+#       - name: Display Environment Variables
+#         run: echo ${{ env.SECRET_KEY }}
+#       - name: Deploy
+#         run: |
+#           zip -j deploy.zip ../*
+#           aws lambda update-function-code --function-name=SWO-Backend --zip-file=fileb://deploy.zip
